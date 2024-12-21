@@ -1,3 +1,6 @@
+using juridical_api.Db;
+using Microsoft.EntityFrameworkCore;
+
 namespace juridical_api
 {
     public class Program
@@ -8,6 +11,9 @@ namespace juridical_api
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
+
+            var connectionString = builder.Configuration.GetConnectionString("DatabaseConnection");
+            builder.Services.AddDbContextPool<AppDbContext>(options => options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
 
             var app = builder.Build();
 
