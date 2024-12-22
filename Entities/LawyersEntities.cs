@@ -9,7 +9,7 @@ namespace juridical_api.Entities
     public class LawyersEntities
     {
         [Key]
-        public string Id { get; set; }
+        public int Id { get; set; }
 
         [Required]
         [StringLength(50)]
