@@ -1,9 +1,10 @@
 using Microsoft.EntityFrameworkCore;
-using juridical_api.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using juridical_api.Configuration;
+using juridical_api.Models.Entities;
 
 namespace juridical_api.Db
 {
@@ -25,7 +26,15 @@ namespace juridical_api.Db
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            base.OnModelCreating(modelBuilder);
+            modelBuilder.ApplyConfiguration(new CasesConfiguration());
+            modelBuilder.ApplyConfiguration(new ClientsConfiguration());
+            modelBuilder.ApplyConfiguration(new ContractsConfiguration());
+            modelBuilder.ApplyConfiguration(new CourtHearingsConfiguration());
+            modelBuilder.ApplyConfiguration(new DocumentsConfiguration());
+            modelBuilder.ApplyConfiguration(new LawyersConfiguration());
+            modelBuilder.ApplyConfiguration(new PaymentsConfiguration());
+            modelBuilder.ApplyConfiguration(new ReviewsConfiguration());
+            modelBuilder.ApplyConfiguration(new TasksConfiguration());
         }
     }
 }
