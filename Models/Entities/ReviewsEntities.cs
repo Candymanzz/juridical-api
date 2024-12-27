@@ -9,26 +9,26 @@ namespace juridical_api.Models.Entities
     public class ReviewsEntities
     {
         [Key]
-        public int Id { get; set; }
+        public Guid Id { get; set; }
 
         [Required]
-        public int Rating { get; set; }
+        public int Rating { get; set; } = 0;
 
         [Required]
         [StringLength(50)]
-        public string Comment { get; set; }
+        public string Comment { get; set; } = string.Empty;
 
         [Required]
         public DateTime Date { get; set; }
 
         [Required]
-        public int ClientId { get; set; }
+        public Guid ClientId { get; set; }
 
-        public virtual ClientsEntities Client { get; set; }
+        public ClientsEntities? Client { get; set; }
 
         [Required]
-        public int LawyerId { get; set; }
+        public Guid LawyerId { get; set; }
 
-        public virtual LawyersEntities Lawyer { get; set; }
+        public LawyersEntities? Lawyer { get; set; }
     }
 }

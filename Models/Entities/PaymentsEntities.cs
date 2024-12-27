@@ -11,27 +11,27 @@ namespace juridical_api.Models.Entities
     public class PaymentsEntities
     {
         [Key]
-        public int Id { get; set; }
+        public Guid Id { get; set; }
 
         [Required]
         public DateTime PaymentDate { get; set; }
 
         [Required]
         [Column(TypeName = "decimal(10, 2)")]
-        public decimal Amount { get; set; }
+        public decimal Amount { get; set; } = 0;
 
         [Required]
         [StringLength(20)]
-        public string PaymentMethod { get; set; }
+        public string PaymentMethod { get; set; } = string.Empty;
 
         [Required]
-        public int ClientId { get; set; }
+        public Guid ClientId { get; set; }
 
-        public virtual ClientsEntities Client { get; set; }
+        public ClientsEntities? Client { get; set; }
 
         [Required]
-        public int CaseId { get; set; }
+        public Guid CaseId { get; set; }
 
-        public virtual CasesEntities Case { get; set; }
+        public CasesEntities? Case { get; set; }
     }
 }

@@ -9,27 +9,27 @@ namespace juridical_api.Models.Entities
     public class CasesEntities
     {
         [Key]
-        public int Id { get; set; }
+        public Guid Id { get; set; }
 
         [Required]
         [StringLength(30)]
-        public string CaseName { get; set; }
+        public string CaseName { get; set; } = string.Empty;
 
         [Required]
         [StringLength(100)]
-        public string Description { get; set; }
+        public string Description { get; set; } = string.Empty;
 
         [Required]
-        public DateTime OpeningDate { get; set; }
+        public DateTime OpeningDate { get; set; } 
 
         [Required]
-        public int ClientId { get; set; }
+        public Guid ClientId { get; set; }
 
-        public virtual ClientsEntities Client { get; set; }
+        public ClientsEntities? Client { get; set; }
 
         [Required]
-        public int LawyerId { get; set; }
+        public Guid LawyerId { get; set; }
 
-        public virtual LawyersEntities Lawyer { get; set; }
+        public LawyersEntities? Lawyer { get; set; }
     }
 }

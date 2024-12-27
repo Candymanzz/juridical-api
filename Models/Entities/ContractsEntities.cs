@@ -9,7 +9,7 @@ namespace juridical_api.Models.Entities
     public class ContractsEntities
     {
         [Key]
-        public int Id { get; set; }
+        public Guid Id { get; set; }
 
         [Required]
         public DateTime SigningDate { get; set; }
@@ -19,13 +19,13 @@ namespace juridical_api.Models.Entities
 
 
         [Required]
-        public int ClientId { get; set; }
+        public Guid ClientId { get; set; }
 
-        public virtual ClientsEntities Client { get; set; }
+        public ClientsEntities? Client { get; set; }
 
         [Required]
-        public int LawyerId { get; set; }
+        public Guid LawyerId { get; set; }
 
-        public virtual LawyersEntities Lawyer { get; set; }
+        public LawyersEntities? Lawyer { get; set; }
     }
 }

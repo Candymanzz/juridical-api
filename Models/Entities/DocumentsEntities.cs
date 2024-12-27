@@ -9,22 +9,26 @@ namespace juridical_api.Models.Entities
     public class DocumentsEntities
     {
         [Key]
-        public int Id { get; set; }
+        public Guid Id { get; set; }
 
         [Required]
         [StringLength(50)]
-        public string DocumentName { get; set; }
+        public string DocumentName { get; set; } = string.Empty;
 
         [Required]
         public DateTime CreationDate { get; set; }
 
         [Required]
         [StringLength(25)]
-        public string DocumentType { get; set; }
+        public string DocumentType { get; set; } = string.Empty;
 
         [Required]
-        public int CaseId { get; set; }
+        [StringLength(100)]
+        public string DocumentText { get; set; } = string.Empty;
 
-        public virtual CasesEntities Case { get; set; }
+        [Required]
+        public Guid CaseId { get; set; }
+
+        public CasesEntities? Case { get; set; }
     }
 }

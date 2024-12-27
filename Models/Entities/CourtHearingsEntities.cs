@@ -9,18 +9,18 @@ namespace juridical_api.Models.Entities
     public class CourtHearingsEntities
     {
         [Key]
-        public int Id { get; set; }
+        public Guid Id { get; set; }
 
         [Required]
         public DateTime HearingDate { get; set; }
 
         [Required]
         [StringLength(50)]
-        public string Place { get; set; }
+        public string Place { get; set; } = string.Empty;
 
         [Required]
-        public int CaseId { get; set; }
+        public Guid CaseId { get; set; }
 
-        public virtual CasesEntities Case { get; set; }
+        public CasesEntities? Case { get; set; }
     }
 }

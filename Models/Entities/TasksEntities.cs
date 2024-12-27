@@ -9,26 +9,26 @@ namespace juridical_api.Models.Entities
     public class TasksEntities
     {
         [Key]
-        public int Id { get; set; }
+        public Guid Id { get; set; }
 
         [Required]
         [StringLength(50)]
-        public string TaskDescription { get; set; }
+        public string TaskDescription { get; set; } = string.Empty;
 
         [Required]
         public DateTime DateOfCompletion { get; set; }
 
         [Required]
-        public string Status { get; set; }
+        public string Status { get; set; } = string.Empty;
 
         [Required]
-        public int CaseId { get; set; }
+        public Guid CaseId { get; set; }
 
-        public virtual CasesEntities Case { get; set; }
+        public CasesEntities? Case { get; set; }
 
         [Required]
-        public int LawyerId { get; set; }
+        public Guid LawyerId { get; set; }
 
-        public virtual LawyersEntities Lawyer { get; set; }
+        public LawyersEntities? Lawyer { get; set; }
     }
 }
