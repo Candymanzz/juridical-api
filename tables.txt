@@ -1,0 +1,63 @@
+﻿Вот пример реляционной базы данных для юридической фирмы, состоящей из 9 таблиц:
+
+1. Клиенты (Clients)
+ID (Primary Key)
+Имя
+Фамилия
+Email
+Телефон
+Адрес
+2. Адвокаты (Lawyers)
+ID (Primary Key)
+Имя
+Фамилия
+Специализация
+Телефон
+Email
+3. Дела (Cases)
+ID (Primary Key)
+Название дела
+Описание
+Дата открытия
+Статус (например, "в процессе", "закрыто")
+ID клиента (Foreign Key на Clients)
+ID адвоката (Foreign Key на Lawyers)
+4. Документы (Documents)
+ID (Primary Key)
+Название документа
+Дата создания
+Тип документа (например, "договор", "жалоба")
+ID дела (Foreign Key на Cases)
+5. Платежи (Payments)
+ID (Primary Key)
+Дата платежа
+Сумма
+Метод платежа (например, "наличные", "карта")
+ID клиента (Foreign Key на Clients)
+ID дела (Foreign Key на Cases)
+6. Судебные заседания (Court Hearings)
+ID (Primary Key)
+Дата заседания
+Место
+ID дела (Foreign Key на Cases)
+7. Контракты (Contracts)
+ID (Primary Key)
+Дата подписания
+Срок действия
+ID клиента (Foreign Key на Clients)
+ID адвоката (Foreign Key на Lawyers)
+8. Задачи (Tasks)
+ID (Primary Key)
+Описание задачи
+Дата выполнения
+Статус (например, "выполнено", "в процессе")
+ID адвоката (Foreign Key на Lawyers)
+ID дела (Foreign Key на Cases)
+9. Отзывы (Reviews)
+ID (Primary Key)
+Рейтинг (от 1 до 5)
+Комментарий
+Дата
+ID клиента (Foreign Key на Clients)
+ID адвоката (Foreign Key на Lawyers)
+Эта структура позволит эффективно управлять информацией о клиентах, адвокатах, делах и связанных с ними процессах в юридической фирме.
