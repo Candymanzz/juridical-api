@@ -30,5 +30,17 @@ namespace juridical_api.Models.Entities
         [Required]
         [StringLength(50)]
         public string Address { get; set; } = string.Empty;
+
+        //FG keys
+
+        public LawyersEntities? Lawyer { get; set; }
+
+        public ReviewsEntities? Reviews { get; set; }
+
+        public PaymentsEntities? Payments { get; set; }
+
+        public CasesEntities? Cases { get; set; }
+
+        public ContractsEntities? Contracts { get; set; }
     }
 }

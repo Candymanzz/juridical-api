@@ -30,6 +30,16 @@ namespace juridical_api.Models.Entities
         [Required]
         public Guid LawyerId { get; set; }
 
-        public LawyersEntities? Lawyer { get; set; }
+        public LawyersEntities? Lawyers { get; set; }
+
+        //FG keys
+
+        public PaymentsEntities? Payments { get; set; }
+
+        public TasksEntities? Tasks { get; set; }
+
+        public DocumentsEntities? Documents { get; set; }
+
+        public CourtHearingsEntities? CourtHearings { get; set; }
     }
 }

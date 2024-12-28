@@ -23,7 +23,7 @@ namespace juridical_api.Models.Entities
 
         [Required]
         public Guid ClientId { get; set; }
-
+ö
         public ClientsEntities? Client { get; set; }
 
         [Required]
