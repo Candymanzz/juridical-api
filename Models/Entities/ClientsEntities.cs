@@ -35,12 +35,12 @@ namespace juridical_api.Models.Entities
 
         public LawyersEntities? Lawyer { get; set; }
 
-        public ReviewsEntities? Reviews { get; set; }
+        public ReviewsEntities? Review { get; set; }
 
-        public PaymentsEntities? Payments { get; set; }
+        public PaymentsEntities? Payment { get; set; }
 
-        public CasesEntities? Cases { get; set; }
+        public CasesEntities? Case { get; set; }
 
-        public ContractsEntities? Contracts { get; set; }
+        public ContractsEntities? Contract { get; set; }
     }
 }
