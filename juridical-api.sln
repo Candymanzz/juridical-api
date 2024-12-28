@@ -3,7 +3,12 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.9.34728.123
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "juridical-api", "juridical-api.csproj", "{046D3B69-B084-46B9-8486-2ABB4DA9C4F9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "juridical-api", "juridical-api.csproj", "{046D3B69-B084-46B9-8486-2ABB4DA9C4F9}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{80DB120F-7BB4-4804-9809-52987A57D558}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
