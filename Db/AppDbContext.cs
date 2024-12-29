@@ -35,6 +35,8 @@ namespace juridical_api.Db
             modelBuilder.ApplyConfiguration(new PaymentsConfiguration());
             modelBuilder.ApplyConfiguration(new ReviewsConfiguration());
             modelBuilder.ApplyConfiguration(new TasksConfiguration());
+
+            base.OnModelCreating(modelBuilder);
         }
     }
 }
