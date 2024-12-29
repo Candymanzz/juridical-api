@@ -22,10 +22,10 @@ namespace juridical_api.Configuration
                 HasForeignKey<ReviewsEntities>(r => r.LawyerId);
             builder.HasOne(l => l.Task).
                 WithOne(t => t.Lawyer).
-                HasForeignKey<CasesEntities>(t => t.LawyerId);
+                HasForeignKey<TasksEntities>(t => t.LawyerId);
             builder.HasOne(l => l.Contract).
                 WithOne(cn => cn.Lawyer).
-                HasForeignKey<CasesEntities>(cn => cn.LawyerId);
+                HasForeignKey<ContractsEntities>(cn => cn.LawyerId);
 
             builder.HasData
             (
