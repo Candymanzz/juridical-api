@@ -12,16 +12,21 @@ namespace juridical_api.Configuration
     {
         public void Configure(EntityTypeBuilder<TasksEntities> builder)
         {
+            builder.HasKey(t => t.Id);
+
+            builder.HasOne(t => t.Lawyer).WithOne(l => l.Task);
+            builder.HasOne(t => t.Case).WithOne(cs => cs.Task);
+
             builder.HasData
             (
                 new TasksEntities
                 {
-                    Id = 1,
+                    Id = new Guid("8B9658B8-49C1-423A-A807-71D1706710E9"),
                     TaskDescription = "Need more money",
                     DateOfCompletion = new DateTime(2004, 9, 19),
                     Status = "In progress",
-                    CaseId = 1,
-                    LawyerId = 1
+                    CaseId = new Guid("8B9658B8-49C1-423A-A807-71D1706710E5"),
+                    LawyerId = new Guid("8B9658B8-49C1-423A-A807-71D1706710E2")
                 }
             );
         }

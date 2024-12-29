@@ -12,15 +12,19 @@ namespace juridical_api.Configuration
     {
         public void Configure(EntityTypeBuilder<DocumentsEntities> builder)
         {
+            builder.HasKey(d => d.Id);
+
+            builder.HasOne(d => d.Case).WithOne(cs => cs.Document);
+
             builder.HasData
             (
                 new DocumentsEntities
                 {
-                    Id = 1,
+                    Id = new Guid("8B9658B8-49C1-423A-A807-71D1706710E6"),
                     DocumentName = "Super Document",
                     CreationDate = new DateTime(2005, 5, 14),
                     DocumentType = "Dicloration",
-                    CaseId = 1
+                    CaseId = new Guid("8B9658B8-49C1-423A-A807-71D1706710E5")
                 }
             );
         }

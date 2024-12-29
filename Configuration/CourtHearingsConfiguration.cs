@@ -12,14 +12,18 @@ namespace juridical_api.Configuration
     {
         public void Configure(EntityTypeBuilder<CourtHearingsEntities> builder)
         {
+            builder.HasKey(ch => ch.Id);
+
+            builder.HasOne(ch => ch.Case).WithOne(cs => cs.CourtHearing);
+
             builder.HasData
             (
                 new CourtHearingsEntities
                 {
-                    Id = 1,
+                    Id = new Guid("8B9658B8-49C1-423A-A807-71D1706710E4"),
                     HearingDate = new DateTime(2001, 11, 02),
                     Place = "Belovejskay pyshcha",
-                    CaseId = 1
+                    CaseId = new Guid("8B9658B8-49C1-423A-A807-71D1706710E5")
                 }
             );
         }

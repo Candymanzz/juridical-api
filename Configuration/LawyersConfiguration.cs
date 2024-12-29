@@ -12,11 +12,26 @@ namespace juridical_api.Configuration
     {
         public void Configure(EntityTypeBuilder<LawyersEntities> builder)
         {
+            builder.HasKey(l => l.Id);
+
+            builder.HasOne(l => l.Case).
+                WithOne(cs => cs.Lawyer).
+                HasForeignKey<CasesEntities>(cs => cs.LawyerId);
+            builder.HasOne(l => l.Review).
+                WithOne(r => r.Lawyer).
+                HasForeignKey<ReviewsEntities>(r => r.LawyerId);
+            builder.HasOne(l => l.Task).
+                WithOne(t => t.Lawyer).
+                HasForeignKey<CasesEntities>(t => t.LawyerId);
+            builder.HasOne(l => l.Contract).
+                WithOne(cn => cn.Lawyer).
+                HasForeignKey<CasesEntities>(cn => cn.LawyerId);
+
             builder.HasData
             (
                 new LawyersEntities
                 {
-                    Id = 1,
+                    Id = new Guid("8B9658B8-49C1-423A-A807-71D1706710E2"),
                     FirstName = "Anna",
                     LastName = "Kanitta",
                     Specialization = "Criminal",

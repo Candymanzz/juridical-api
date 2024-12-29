@@ -12,16 +12,21 @@ namespace juridical_api.Configuration
     {
         public void Configure(EntityTypeBuilder<PaymentsEntities> builder)
         {
+            builder.HasKey(p => p.Id);
+
+            builder.HasOne(p => p.Client).WithOne(cl => cl.Payment);
+            builder.HasOne(p => p.Case).WithOne(cs => cs.Payment);
+
             builder.HasData
             (
                 new PaymentsEntities
                 {
-                    Id = 1,
+                    Id = new Guid("8B9658B8-49C1-423A-A807-71D1706710E7"),
                     PaymentDate = new DateTime(2013, 1, 2),
                     Amount = 6000.32m,
                     PaymentMethod = "Card",
-                    ClientId = 1,
-                    CaseId = 1
+                    ClientId = new Guid ("8B9658B8-49C1-423A-A807-71D1706710E1"),
+                    CaseId = new Guid("8B9658B8-49C1-423A-A807-71D1706710E5")
                 }
             );
         }
