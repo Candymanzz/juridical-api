@@ -19,6 +19,7 @@ namespace juridical_api.Models.Entities
         public string Comment { get; set; } = string.Empty;
 
         [Required]
+        [DataType(DataType.Date)]
         public DateTime Date { get; set; }
 
         [Required]

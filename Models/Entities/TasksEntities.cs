@@ -16,6 +16,7 @@ namespace juridical_api.Models.Entities
         public string TaskDescription { get; set; } = string.Empty;
 
         [Required]
+        [DataType(DataType.Date)]
         public DateTime DateOfCompletion { get; set; }
 
         [Required]

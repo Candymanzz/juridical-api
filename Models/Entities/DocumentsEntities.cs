@@ -16,6 +16,7 @@ namespace juridical_api.Models.Entities
         public string DocumentName { get; set; } = string.Empty;
 
         [Required]
+        [DataType(DataType.Date)]
         public DateTime CreationDate { get; set; }
 
         [Required]

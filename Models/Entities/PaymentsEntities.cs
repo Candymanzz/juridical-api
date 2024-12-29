@@ -14,6 +14,7 @@ namespace juridical_api.Models.Entities
         public Guid Id { get; set; }
 
         [Required]
+        [DataType(DataType.Date)]
         public DateTime PaymentDate { get; set; }
 
         [Required]
