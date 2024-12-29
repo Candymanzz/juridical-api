@@ -32,7 +32,7 @@ namespace juridical_api.Models.Entities
 
         public LawyersEntities? Lawyer { get; set; }
 
-        //FG keys
+        //FK
 
         public PaymentsEntities? Payment { get; set; }
 

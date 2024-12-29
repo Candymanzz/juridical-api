@@ -31,14 +31,14 @@ namespace juridical_api.Models.Entities
         [StringLength(50)]
         public string Email { get; set; } = string.Empty;
 
-        //FG keys
+        //FK
 
-        public ContractsEntities? Contracts { get; set; }
+        public ContractsEntities? Contract { get; set; }
 
-        public TasksEntities? Tasks { get; set; }
+        public TasksEntities? Task { get; set; }
 
-        public ReviewsEntities? Reviews { get; set; }
+        public ReviewsEntities? Review { get; set; }
 
-        public CasesEntities? Cases { get; set; }
+        public CasesEntities? Case { get; set; }
     }
 }
