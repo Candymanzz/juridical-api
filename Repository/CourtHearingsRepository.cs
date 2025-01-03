@@ -1,45 +1,45 @@
-﻿using juridical_api.Contracts;
-using juridical_api.Db;
+﻿using juridical_api.Db;
 using juridical_api.Models.Entities;
 using Microsoft.EntityFrameworkCore;
+using juridical_api.Contracts;
 
 namespace juridical_api.Repository
 {
-    public class ClientsRepository : SaveChangesDb, IRepository<ClientsEntities>, IDisposable 
+    public class CourtHearingsRepository : SaveChangesDb, IRepository<CourtHearingsEntities>, IDisposable
     {
         private readonly AppDbContext appDbContext;
         private bool disposed = false;
 
-        public ClientsRepository(AppDbContext appDbContext)
+        public CourtHearingsRepository(AppDbContext appDbContext)
         {
             this.appDbContext = appDbContext ?? throw new ArgumentNullException(nameof(appDbContext));
         }
 
-        public async Task Create(ClientsEntities item)
+        public async Task Create(CourtHearingsEntities item)
         {
-            await appDbContext.Clients.AddAsync(item);
+            await appDbContext.CourtHearings.AddAsync(item);
             await Save(appDbContext);
         }
 
         public async Task Delete(Guid id)
         {
-            await appDbContext.Clients.Where(cl => cl.Id == id).ExecuteDeleteAsync();
+            await appDbContext.CourtHearings.Where(cl => cl.Id == id).ExecuteDeleteAsync();
             await Save(appDbContext);
         }
 
-        public async Task<ClientsEntities?> Get(Guid id)
+        public async Task<CourtHearingsEntities?> Get(Guid id)
         {
-            return await appDbContext.Clients.AsNoTracking().FirstOrDefaultAsync(cl => cl.Id == id);
+            return await appDbContext.CourtHearings.AsNoTracking().FirstOrDefaultAsync(cl => cl.Id == id);
         }
 
-        public async Task<List<ClientsEntities>> GetAll()
+        public async Task<List<CourtHearingsEntities>> GetAll()
         {
-            return await appDbContext.Clients.AsNoTracking().ToListAsync();
+            return await appDbContext.CourtHearings.AsNoTracking().ToListAsync();
         }
 
-        public async Task Update(Guid id, ClientsEntities item)
+        public async Task Update(Guid id, CourtHearingsEntities item)
         {
-            var existingClient = await appDbContext.Clients.FirstOrDefaultAsync(cl => cl.Id == id);
+            var existingClient = await appDbContext.CourtHearings.FirstOrDefaultAsync(cl => cl.Id == id);
 
             if (existingClient != null)
             {
@@ -48,7 +48,7 @@ namespace juridical_api.Repository
             }
             else
             {
-                throw new KeyNotFoundException("Client not found.");
+                throw new KeyNotFoundException("Court hearings not found.");
             }
         }
 
@@ -70,8 +70,8 @@ namespace juridical_api.Repository
             Dispose(true);
             GC.SuppressFinalize(this);
         }
-        
-        ~ClientsRepository()
+
+        ~CourtHearingsRepository()
         {
             Dispose(false);
         }
