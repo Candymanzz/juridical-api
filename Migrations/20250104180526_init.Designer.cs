@@ -12,8 +12,8 @@ using juridical_api.Db;
 namespace juridical_api.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20241229212951_Init")]
-    partial class Init
+    [Migration("20250104180526_init")]
+    partial class init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -98,9 +98,6 @@ namespace juridical_api.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("varchar(50)");
 
-                    b.Property<Guid?>("LawyerId")
-                        .HasColumnType("char(36)");
-
                     b.Property<string>("Phone")
                         .IsRequired()
                         .HasMaxLength(20)
@@ -108,14 +105,21 @@ namespace juridical_api.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("LawyerId");
-
                     b.ToTable("Clients");
 
                     b.HasData(
                         new
                         {
                             Id = new Guid("8b9658b8-49c1-423a-a807-71d1706710e1"),
+                            Address = "Nemecia, Frankich 22 / 1",
+                            Email = "Dadaya@gmail.com",
+                            FirstName = "Slava",
+                            LastName = "Spanish",
+                            Phone = "+3226232109"
+                        },
+                        new
+                        {
+                            Id = new Guid("8b9238b8-49c1-423a-a807-71d170671123"),
                             Address = "Nemecia, Frankich 22 / 1",
                             Email = "Dadaya@gmail.com",
                             FirstName = "Slava",
@@ -441,15 +445,6 @@ namespace juridical_api.Migrations
                         .IsRequired();
 
                     b.Navigation("Client");
-
-                    b.Navigation("Lawyer");
-                });
-
-            modelBuilder.Entity("juridical_api.Models.Entities.ClientsEntities", b =>
-                {
-                    b.HasOne("juridical_api.Models.Entities.LawyersEntities", "Lawyer")
-                        .WithMany()
-                        .HasForeignKey("LawyerId");
 
                     b.Navigation("Lawyer");
                 });
