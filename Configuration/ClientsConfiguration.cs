@@ -36,7 +36,16 @@ namespace juridical_api.Configuration
                     LastName = "Spanish",
                     Email = "Dadaya@gmail.com",
                     Phone = "+3226232109",
-                    Address = "Nemecia, Frankich 22 / 1"
+                    Address = "Nemecia, Frankich 22 / 1",
+                },
+                new ClientsEntities
+                {
+                    Id = new Guid("8B9238B8-49C1-423A-A807-71D170671123"),
+                    FirstName = "Slava",
+                    LastName = "Spanish",
+                    Email = "Dadaya@gmail.com",
+                    Phone = "+3226232109",
+                    Address = "Nemecia, Frankich 22 / 1",
                 }
             );
         }
