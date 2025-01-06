@@ -1,12 +1,13 @@
 ﻿namespace juridical_api.Contracts
 {
-    public interface IRepository<T> : IDisposable where T : class
+    public interface IRepository<T, F> : IDisposable where T : class
+        where F : class
     {
-        Task<List<T>> GetAll();
-        Task<T?> Get(Guid id);
-        Task Create(T item);
-        Task Update(Guid id, T item);
-        Task Delete(Guid id);
+        List<F> GetAll();
+        F? Get(Guid id);
+        void Create(T item);
+        void Update(Guid id, T item);
+        void Delete(Guid id);
         bool StatusDispose();
     }
 }
