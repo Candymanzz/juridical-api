@@ -28,7 +28,6 @@ CREATE TABLE clients (
   Email VARCHAR(50) NOT NULL,
   Phone VARCHAR(20) NOT NULL,
   Address VARCHAR(50) NOT NULL,
-  LawyerId CHAR(36),
   PRIMARY KEY (Id)
 );
 
@@ -110,7 +109,7 @@ INSERT INTO cases (Id, CaseName, Description, OpeningDate, ClientId, LawyerId)
 VALUES ('8b9658b8-49c1-423a-a807-71d1706710e5', 'Case name 1', 'Some description', '2000-11-22 00:00:00', '8b9658b8-49c1-423a-a807-71d1706710e1', '8b9658b8-49c1-423a-a807-71d1706710e2');
 
 INSERT INTO clients (Id, FirstName, LastName, Email, Phone, Address, LawyerId) 
-VALUES ('8b9658b8-49c1-423a-a807-71d1706710e1', 'Slava', 'Spanish', 'Dadaya@gmail.com', '+3226232109', 'Nemecia, Frankich 22 / 1', '8B9658B8-49C1-423A-A807-71D1706710E2');
+VALUES ('8b9658b8-49c1-423a-a807-71d1706710e1', 'Slava', 'Spanish', 'Dadaya@gmail.com', '+3226232109', 'Nemecia, Frankich 22 / 1');
 
 INSERT INTO contracts (Id, SigningDate, ExpirationDate, ClientId, LawyerId) 
 VALUES ('8b9658b8-49c1-423a-a807-71d1706710e3', '2001-11-02 00:00:00', '2002-12-11 00:00:00', '8b9658b8-49c1-423a-a807-71d1706710e1', '8b9658b8-49c1-423a-a807-71d1706710e2');
