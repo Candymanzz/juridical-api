@@ -5,7 +5,7 @@ namespace juridical_api.Profile
 {
     public class CourtHearingsProfile : AutoMapper.Profile
     {
-        CourtHearingsProfile()
+        public CourtHearingsProfile()
         {
             CreateMap<CourtHearingsEntities, CourtHearingsDto>();
         }

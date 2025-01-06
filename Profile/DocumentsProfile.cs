@@ -5,7 +5,7 @@ namespace juridical_api.Profile
 {
     public class DocumentsProfile : AutoMapper.Profile
     {
-        DocumentsProfile()
+        public DocumentsProfile()
         {
             CreateMap<DocumentsEntities, DocumentsDto>();
         }

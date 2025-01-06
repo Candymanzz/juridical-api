@@ -5,7 +5,7 @@ namespace juridical_api.Profile
 {
     public class PaymentsProfile : AutoMapper.Profile
     {
-        PaymentsProfile()
+        public PaymentsProfile()
         {
             CreateMap<PaymentsEntities, PaymentsDto>();
         }

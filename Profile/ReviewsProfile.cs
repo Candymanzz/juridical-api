@@ -5,7 +5,7 @@ namespace juridical_api.Profile
 {
     public class ReviewsProfile : AutoMapper.Profile
     {
-        ReviewsProfile()
+        public ReviewsProfile()
         {
             CreateMap<ReviewsEntities, ReviewsDto>();
         }

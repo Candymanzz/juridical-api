@@ -5,7 +5,7 @@ namespace juridical_api.Profile
 {
     public class TasksProfile : AutoMapper.Profile
     {
-        TasksProfile() 
+        public TasksProfile() 
         {
             CreateMap<TasksEntities, TasksDto>();
         }
