@@ -2,53 +2,68 @@
 using juridical_api.Models.Entities;
 using Microsoft.EntityFrameworkCore;
 using juridical_api.Contracts;
+using juridical_api.DTO;
+using AutoMapper;
 
 namespace juridical_api.Repository
 {
-    public class CasesRepository : SaveChangesDb, IRepository<CasesEntities>, IDisposable
+    public class CasesRepository : SaveChangesDb, IRepository<CasesEntities, CasesDto>, IDisposable
     {
         private readonly AppDbContext appDbContext;
         private bool disposed = false;
+        private readonly IMapper mapper;
 
-        public CasesRepository(AppDbContext appDbContext)
+        public CasesRepository(AppDbContext appDbContext, IMapper mapper)
         {
             this.appDbContext = appDbContext ?? throw new ArgumentNullException(nameof(appDbContext));
+            this.mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
         }
 
-        public async Task Create(CasesEntities item)
+        public void Create(CasesEntities item)
         {
-            await appDbContext.Cases.AddAsync(item);
-            await Save(appDbContext);
+            appDbContext.Cases.Add(item);
+            appDbContext.SaveChanges();
         }
 
-        public async Task Delete(Guid id)
+        public void Delete(Guid id)
         {
-            await appDbContext.Cases.Where(cl => cl.Id == id).ExecuteDeleteAsync();
-            await Save(appDbContext);
-        }
-
-        public async Task<CasesEntities?> Get(Guid id)
-        {
-            return await appDbContext.Cases.AsNoTracking().FirstOrDefaultAsync(cl => cl.Id == id);
-        }
-
-        public async Task<List<CasesEntities>> GetAll()
-        {
-            return await appDbContext.Cases.AsNoTracking().ToListAsync();
-        }
-
-        public async Task Update(Guid id, CasesEntities item)
-        {
-            var existingClient = await appDbContext.Cases.FirstOrDefaultAsync(cl => cl.Id == id);
-
-            if (existingClient != null)
+            var case_ = appDbContext.Cases.Find(id);
+            if (case_ != null)
             {
-                appDbContext.Entry(existingClient).CurrentValues.SetValues(item);
-                await Save(appDbContext);
+                appDbContext.Cases.Remove(case_);
+                appDbContext.SaveChanges();
             }
             else
             {
-                throw new KeyNotFoundException("Case not found.");
+                throw new ArgumentException($"ID: {id} not faund.");
+            }
+        }
+
+        public CasesDto? Get(Guid id)
+        {
+            return mapper.ProjectTo<CasesDto>(appDbContext.Set<CasesEntities>().AsNoTracking().Where(cs => cs.Id == id)).FirstOrDefault();
+        }
+
+        public List<CasesDto> GetAll()
+        {
+            return mapper.ProjectTo<CasesDto>(appDbContext.Set<CasesEntities>().AsNoTracking()).ToList();
+        }
+
+        public void Update(Guid id, CasesEntities item)
+        {
+            var case_ = appDbContext.Cases.Find(id);
+            if (case_ != null)
+            {
+                case_.CaseName = item.CaseName;
+                case_.Description = item.Description;
+                case_.OpeningDate = item.OpeningDate;
+                case_.ClientId = item.ClientId;
+                case_.LawyerId = item.LawyerId;
+                appDbContext.SaveChanges();
+            }
+            else
+            {
+                throw new ArgumentException($"ID: {id} not faund.");
             }
         }
 

@@ -2,53 +2,68 @@
 using juridical_api.Models.Entities;
 using Microsoft.EntityFrameworkCore;
 using juridical_api.Contracts;
+using juridical_api.DTO;
+using AutoMapper;
 
 namespace juridical_api.Repository
 {
-    public class DocumentsRepository : SaveChangesDb, IRepository<DocumentsEntities>, IDisposable
+    public class DocumentsRepository : SaveChangesDb, IRepository<DocumentsEntities, DocumentsDto>, IDisposable
     {
         private readonly AppDbContext appDbContext;
         private bool disposed = false;
+        private readonly IMapper mapper;
 
-        public DocumentsRepository(AppDbContext appDbContext)
+        public DocumentsRepository(AppDbContext appDbContext, IMapper mapper)
         {
+            this.mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
             this.appDbContext = appDbContext ?? throw new ArgumentNullException(nameof(appDbContext));
         }
 
-        public async Task Create(DocumentsEntities item)
+        public void Create(DocumentsEntities item)
         {
-            await appDbContext.Documents.AddAsync(item);
-            await Save(appDbContext);
+            appDbContext.Documents.Add(item);
+            appDbContext.SaveChanges();
         }
 
-        public async Task Delete(Guid id)
+        public void Delete(Guid id)
         {
-            await appDbContext.Documents.Where(cl => cl.Id == id).ExecuteDeleteAsync();
-            await Save(appDbContext);
-        }
-
-        public async Task<DocumentsEntities?> Get(Guid id)
-        {
-            return await appDbContext.Documents.AsNoTracking().FirstOrDefaultAsync(cl => cl.Id == id);
-        }
-
-        public async Task<List<DocumentsEntities>> GetAll()
-        {
-            return await appDbContext.Documents.AsNoTracking().ToListAsync();
-        }
-
-        public async Task Update(Guid id, DocumentsEntities item)
-        {
-            var existingClient = await appDbContext.Documents.FirstOrDefaultAsync(cl => cl.Id == id);
-
-            if (existingClient != null)
+            var document = appDbContext.Documents.Find(id);
+            if (document != null)
             {
-                appDbContext.Entry(existingClient).CurrentValues.SetValues(item);
-                await Save(appDbContext);
+                appDbContext.Documents.Remove(document);
+                appDbContext.SaveChanges();
             }
             else
             {
-                throw new KeyNotFoundException("Document not found.");
+                throw new ArgumentException($"ID: {id} not faund.");
+            }
+        }
+
+        public DocumentsDto? Get(Guid id)
+        {
+            return mapper.ProjectTo<DocumentsDto>(appDbContext.Set<DocumentsEntities>().AsNoTracking().Where(d => d.Id == id)).FirstOrDefault();
+        }
+
+        public List<DocumentsDto> GetAll()
+        {
+            return mapper.ProjectTo<DocumentsDto>(appDbContext.Set<DocumentsEntities>().AsNoTracking()).ToList();
+        }
+
+        public void Update(Guid id, DocumentsEntities item)
+        {
+            var document = appDbContext.Documents.Find(id);
+            if (document != null)
+            {
+                document.DocumentName = item.DocumentName;
+                document.CreationDate = item.CreationDate;
+                document.DocumentType = item.DocumentType;
+                document.DocumentText = item.DocumentText;
+                document.CaseId = item.CaseId;
+                appDbContext.SaveChanges();
+            }
+            else
+            {
+                throw new ArgumentException($"ID: {id} not faund.");
             }
         }
 

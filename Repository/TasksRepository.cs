@@ -2,53 +2,68 @@
 using juridical_api.Models.Entities;
 using Microsoft.EntityFrameworkCore;
 using juridical_api.Contracts;
+using juridical_api.DTO;
+using AutoMapper;
 
 namespace juridical_api.Repository
 {
-    public class TasksRepository : SaveChangesDb, IRepository<TasksEntities>, IDisposable
+    public class TasksRepository : IRepository<TasksEntities, TasksDto>, IDisposable
     {
         private readonly AppDbContext appDbContext;
         private bool disposed = false;
+        private readonly IMapper mapper;
 
-        public TasksRepository(AppDbContext appDbContext)
+        public TasksRepository(AppDbContext appDbContext, IMapper mapper)
         {
+            this.mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
             this.appDbContext = appDbContext ?? throw new ArgumentNullException(nameof(appDbContext));
         }
 
-        public async Task Create(TasksEntities item)
+        public void Create(TasksEntities item)
         {
-            await appDbContext.Tasks.AddAsync(item);
-            await Save(appDbContext);
+            appDbContext.Tasks.Add(item);
+            appDbContext.SaveChanges();
         }
 
-        public async Task Delete(Guid id)
+        public void Delete(Guid id)
         {
-            await appDbContext.Tasks.Where(cl => cl.Id == id).ExecuteDeleteAsync();
-            await Save(appDbContext);
-        }
-
-        public async Task<TasksEntities?> Get(Guid id)
-        {
-            return await appDbContext.Tasks.AsNoTracking().FirstOrDefaultAsync(cl => cl.Id == id);
-        }
-
-        public async Task<List<TasksEntities>> GetAll()
-        {
-            return await appDbContext.Tasks.AsNoTracking().ToListAsync();
-        }
-
-        public async Task Update(Guid id, TasksEntities item)
-        {
-            var existingClient = await appDbContext.Tasks.FirstOrDefaultAsync(cl => cl.Id == id);
-
-            if (existingClient != null)
+            var task = appDbContext.Tasks.Find(id);
+            if (task != null)
             {
-                appDbContext.Entry(existingClient).CurrentValues.SetValues(item);
-                await Save(appDbContext);
+                appDbContext.Tasks.Remove(task);
+                appDbContext.SaveChanges();
             }
             else
             {
-                throw new KeyNotFoundException("Task not found.");
+                throw new ArgumentException($"ID: {id} not faund.");
+            }
+        }
+
+        public TasksDto? Get(Guid id)
+        {
+            return mapper.ProjectTo<TasksDto>(appDbContext.Set<TasksEntities>().AsNoTracking().Where(cl => cl.Id == id)).FirstOrDefault();
+        }
+
+        public List<TasksDto> GetAll()
+        {
+            return mapper.ProjectTo<TasksDto>(appDbContext.Set<TasksEntities>().AsNoTracking()).ToList();
+        }
+
+        public void Update(Guid id, TasksEntities item)
+        {
+            var task = appDbContext.Tasks.Find(id);
+            if (task != null)
+            {
+                task.TaskDescription = item.TaskDescription;
+                task.DateOfCompletion = item.DateOfCompletion;
+                task.Status = item.Status;
+                task.CaseId = item.CaseId;
+                task.LawyerId = item.LawyerId;
+                appDbContext.SaveChanges();
+            }
+            else
+            {
+                throw new ArgumentException($"ID: {id} not faund.");
             }
         }
 

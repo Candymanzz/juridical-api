@@ -1,54 +1,69 @@
-﻿using juridical_api.Contracts;
+﻿using AutoMapper;
+using juridical_api.Contracts;
 using juridical_api.Db;
+using juridical_api.DTO;
 using juridical_api.Models.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace juridical_api.Repository
 {
-    public class ReviewsRepository : SaveChangesDb, IRepository<ReviewsEntities>, IDisposable
+    public class ReviewsRepository : IRepository<ReviewsEntities, ReviewsDto>, IDisposable
     {
         private readonly AppDbContext appDbContext;
         private bool disposed = false;
+        private readonly IMapper mapper;
 
-        public ReviewsRepository(AppDbContext appDbContext)
+        public ReviewsRepository(AppDbContext appDbContext, IMapper mapper)
         {
+            this.mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
             this.appDbContext = appDbContext ?? throw new ArgumentNullException(nameof(appDbContext));
         }
 
-        public async Task Create(ReviewsEntities item)
+        public void Create(ReviewsEntities item)
         {
-            await appDbContext.Reviews.AddAsync(item);
-            await Save(appDbContext);
+            appDbContext.Reviews.Add(item);
+            appDbContext.SaveChanges();
         }
 
-        public async Task Delete(Guid id)
+        public void Delete(Guid id)
         {
-            await appDbContext.Reviews.Where(cl => cl.Id == id).ExecuteDeleteAsync();
-            await Save(appDbContext);
-        }
-
-        public async Task<ReviewsEntities?> Get(Guid id)
-        {
-            return await appDbContext.Reviews.AsNoTracking().FirstOrDefaultAsync(cl => cl.Id == id);
-        }
-
-        public async Task<List<ReviewsEntities>> GetAll()
-        {
-            return await appDbContext.Reviews.AsNoTracking().ToListAsync();
-        }
-
-        public async Task Update(Guid id, ReviewsEntities item)
-        {
-            var existingClient = await appDbContext.Reviews.FirstOrDefaultAsync(cl => cl.Id == id);
-
-            if (existingClient != null)
+            var review = appDbContext.Reviews.Find(id);
+            if (review != null)
             {
-                appDbContext.Entry(existingClient).CurrentValues.SetValues(item);
-                await Save(appDbContext);
+                appDbContext.Reviews.Remove(review);
+                appDbContext.SaveChanges();
             }
             else
             {
-                throw new KeyNotFoundException("Review not found.");
+                throw new ArgumentException($"ID: {id} not faund.");
+            }
+        }
+
+        public ReviewsDto? Get(Guid id)
+        {
+            return mapper.ProjectTo<ReviewsDto>(appDbContext.Set<ReviewsEntities>().AsNoTracking().Where(cl => cl.Id == id)).FirstOrDefault();
+        }
+
+        public List<ReviewsDto> GetAll()
+        {
+            return mapper.ProjectTo<ReviewsDto>(appDbContext.Set<ReviewsEntities>().AsNoTracking()).ToList();
+        }
+
+        public void Update(Guid id, ReviewsEntities item)
+        {
+            var review = appDbContext.Reviews.Find(id);
+            if (review != null)
+            {
+                review.Rating = item.Rating;
+                review.Comment = item.Comment;
+                review.Date = item.Date;
+                review.ClientId = item.ClientId;
+                review.LawyerId = item.LawyerId;
+                appDbContext.SaveChanges();
+            }
+            else
+            {
+                throw new ArgumentException($"ID: {id} not faund.");
             }
         }
 

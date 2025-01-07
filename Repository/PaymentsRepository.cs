@@ -2,53 +2,69 @@
 using juridical_api.Models.Entities;
 using Microsoft.EntityFrameworkCore;
 using juridical_api.Contracts;
+using juridical_api.DTO;
+using AutoMapper;
 
 namespace juridical_api.Repository
 {
-    public class PaymentsRepository : SaveChangesDb, IRepository<PaymentsEntities>, IDisposable
+    public class PaymentsRepository : IRepository<PaymentsEntities, PaymentsDto>, IDisposable
     {
         private readonly AppDbContext appDbContext;
         private bool disposed = false;
+        private readonly IMapper mapper;
 
-        public PaymentsRepository(AppDbContext appDbContext)
+        public PaymentsRepository(AppDbContext appDbContext, IMapper mapper)
         {
+            this.mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
             this.appDbContext = appDbContext ?? throw new ArgumentNullException(nameof(appDbContext));
         }
 
-        public async Task Create(PaymentsEntities item)
+        public void Create(PaymentsEntities item)
         {
-            await appDbContext.Payments.AddAsync(item);
-            await Save(appDbContext);
+            appDbContext.Payments.Add(item);
+            appDbContext.SaveChanges();
         }
 
-        public async Task Delete(Guid id)
+        public void Delete(Guid id)
         {
-            await appDbContext.Payments.Where(cl => cl.Id == id).ExecuteDeleteAsync();
-            await Save(appDbContext);
-        }
-
-        public async Task<PaymentsEntities?> Get(Guid id)
-        {
-            return await appDbContext.Payments.AsNoTracking().FirstOrDefaultAsync(cl => cl.Id == id);
-        }
-
-        public async Task<List<PaymentsEntities>> GetAll()
-        {
-            return await appDbContext.Payments.AsNoTracking().ToListAsync();
-        }
-
-        public async Task Update(Guid id, PaymentsEntities item)
-        {
-            var existingClient = await appDbContext.Payments.FirstOrDefaultAsync(cl => cl.Id == id);
-
-            if (existingClient != null)
+            var payment = appDbContext.Payments.Find(id);
+            if (payment != null)
             {
-                appDbContext.Entry(existingClient).CurrentValues.SetValues(item);
-                await Save(appDbContext);
+                appDbContext.Payments.Remove(payment);
+                appDbContext.SaveChanges();
             }
             else
             {
-                throw new KeyNotFoundException("Payment not found.");
+                throw new ArgumentException($"ID: {id} not faund.");
+            }
+        }
+
+        public PaymentsDto? Get(Guid id)
+        {
+            return mapper.ProjectTo<PaymentsDto>(appDbContext.Set<PaymentsEntities>().AsNoTracking().Where(cl => cl.Id == id)).FirstOrDefault();
+        }
+
+        public List<PaymentsDto> GetAll()
+        {
+            return mapper.ProjectTo<PaymentsDto>(appDbContext.Set<PaymentsEntities>().AsNoTracking()).ToList();
+        }
+
+        public void Update(Guid id, PaymentsEntities item)
+        {
+            var payment = appDbContext.Payments.Find(id);
+            if (payment != null)
+            {
+                payment.PaymentDate = item.PaymentDate;
+                payment.Amount = item.Amount;
+                payment.Amount = item.Amount;
+                payment.PaymentMethod = item.PaymentMethod;
+                payment.ClientId = item.ClientId;
+                payment.CaseId = item.CaseId;
+                appDbContext.SaveChanges(); 
+            }
+            else
+            {
+                throw new ArgumentException($"ID: {id} not faund.");
             }
         }
 

@@ -2,53 +2,67 @@
 using juridical_api.Db;
 using juridical_api.Models.Entities;
 using Microsoft.EntityFrameworkCore;
+using juridical_api.DTO;
+using AutoMapper;
 
 namespace juridical_api.Repository
 {
-    public class ContractsRepository : SaveChangesDb, IRepository<ContractsEntities>, IDisposable
+    public class ContractsRepository : SaveChangesDb, IRepository<ContractsEntities, ContractsDto>, IDisposable
     {
         private readonly AppDbContext appDbContext;
         private bool disposed = false;
+        private readonly IMapper mapper;
 
-        public ContractsRepository(AppDbContext appDbContext)
+        public ContractsRepository(AppDbContext appDbContext, IMapper mapper)
         {
+            this.mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
             this.appDbContext = appDbContext ?? throw new ArgumentNullException(nameof(appDbContext));
         }
 
-        public async Task Create(ContractsEntities item)
+        public void Create(ContractsEntities item)
         {
-            await appDbContext.Contracts.AddAsync(item);
-            await Save(appDbContext);
+            appDbContext.Contracts.Add(item);
+            appDbContext.SaveChanges();
         }
 
-        public async Task Delete(Guid id)
+        public void Delete(Guid id)
         {
-            await appDbContext.Contracts.Where(cl => cl.Id == id).ExecuteDeleteAsync();
-            await Save(appDbContext);
-        }
-
-        public async Task<ContractsEntities?> Get(Guid id)
-        {
-            return await appDbContext.Contracts.AsNoTracking().FirstOrDefaultAsync(cl => cl.Id == id);
-        }
-
-        public async Task<List<ContractsEntities>> GetAll()
-        {
-            return await appDbContext.Contracts.AsNoTracking().ToListAsync();
-        }
-
-        public async Task Update(Guid id, ContractsEntities item)
-        {
-            var existingClient = await appDbContext.Contracts.FirstOrDefaultAsync(cl => cl.Id == id);
-
-            if (existingClient != null)
+            var contract = appDbContext.Contracts.Find(id);
+            if (contract != null)
             {
-                appDbContext.Entry(existingClient).CurrentValues.SetValues(item);
-                await Save(appDbContext);
+                appDbContext.Contracts.Remove(contract);
+                appDbContext.SaveChanges();
             }
             else
             {
-                throw new KeyNotFoundException("Contract not found.");
+                throw new ArgumentException($"ID: {id} not faund.");
+            }
+        }
+
+        public ContractsDto? Get(Guid id)
+        {
+            return mapper.ProjectTo<ContractsDto>(appDbContext.Set<ContractsEntities>().AsNoTracking().Where(cn => cn.Id == id)).FirstOrDefault();
+        }
+
+        public List<ContractsDto> GetAll()
+        {
+            return mapper.ProjectTo<ContractsDto>(appDbContext.Set<ContractsEntities>().AsNoTracking()).ToList();
+        }
+
+        public void Update(Guid id, ContractsEntities item)
+        {
+            var contract = appDbContext.Contracts.Find(id);
+            if (contract != null)
+            {
+                contract.SigningDate = item.SigningDate;
+                contract.ExpirationDate = item.ExpirationDate;
+                contract.ClientId = item.ClientId;
+                contract.LawyerId = item.LawyerId;
+                appDbContext.SaveChanges();
+            }
+            else
+            {
+                throw new ArgumentException($"ID: {id} not faund.");
             }
         }
 

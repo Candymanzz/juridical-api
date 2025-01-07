@@ -1,54 +1,69 @@
-﻿using juridical_api.Contracts;
+﻿using AutoMapper;
+using juridical_api.Contracts;
 using juridical_api.Db;
+using juridical_api.DTO;
 using juridical_api.Models.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace juridical_api.Repository
 {
-    public class LawyersRepository : SaveChangesDb, IRepository<LawyersEntities>, IDisposable
+    public class LawyersRepository : SaveChangesDb, IRepository<LawyersEntities, LawyersDto>, IDisposable
     {
         private readonly AppDbContext appDbContext;
         private bool disposed = false;
+        private readonly IMapper mapper;
 
-        public LawyersRepository(AppDbContext appDbContext)
+        public LawyersRepository(AppDbContext appDbContext, IMapper mapper)
         {
+            this.mapper = mapper ?? throw new ArgumentNullException(nameof(appDbContext));
             this.appDbContext = appDbContext ?? throw new ArgumentNullException(nameof(appDbContext));
         }
 
-        public async Task Create(LawyersEntities item)
+        public void Create(LawyersEntities item)
         {
-            await appDbContext.Lawyers.AddAsync(item);
-            await Save(appDbContext);
+            appDbContext.Lawyers.Add(item);
+            appDbContext.SaveChanges();
         }
 
-        public async Task Delete(Guid id)
+        public void Delete(Guid id)
         {
-            await appDbContext.Lawyers.Where(cl => cl.Id == id).ExecuteDeleteAsync();
-            await Save(appDbContext);
-        }
-
-        public async Task<LawyersEntities?> Get(Guid id)
-        {
-            return await appDbContext.Lawyers.AsNoTracking().FirstOrDefaultAsync(cl => cl.Id == id);
-        }
-
-        public async Task<List<LawyersEntities>> GetAll()
-        {
-            return await appDbContext.Lawyers.AsNoTracking().ToListAsync();
-        }
-
-        public async Task Update(Guid id, LawyersEntities item)
-        {
-            var existingClient = await appDbContext.Lawyers.FirstOrDefaultAsync(cl => cl.Id == id);
-
-            if (existingClient != null)
+            var lawyers = appDbContext.Lawyers.Find(id);
+            if (lawyers != null)
             {
-                appDbContext.Entry(existingClient).CurrentValues.SetValues(item);
-                await Save(appDbContext);
+                appDbContext.Lawyers.Remove(lawyers);
+                appDbContext.SaveChanges();
             }
             else
             {
-                throw new KeyNotFoundException("Lawyer not found.");
+                throw new ArgumentException($"ID: {id} not faund.");
+            }
+        }
+
+        public LawyersDto? Get(Guid id)
+        {
+            return mapper.ProjectTo<LawyersDto>(appDbContext.Set<LawyersEntities>().AsNoTracking().Where(l => l.Id == id)).FirstOrDefault();
+        }
+
+        public List<LawyersDto> GetAll()
+        {
+            return mapper.ProjectTo<LawyersDto>(appDbContext.Set<LawyersEntities>().AsNoTracking()).ToList();
+        }
+
+        public void Update(Guid id, LawyersEntities item)
+        {
+            var lawyers = appDbContext.Lawyers.Find(id);
+            if (lawyers != null)
+            {
+                lawyers.FirstName = item.FirstName;
+                lawyers.LastName = item.LastName;
+                lawyers.Specialization = item.Specialization;
+                lawyers.Phone = item.Phone;
+                lawyers.Email = item.Email;
+                appDbContext.SaveChanges();
+            }
+            else
+            {
+                throw new ArgumentException($"ID: {id} not faund.");
             }
         }
 
