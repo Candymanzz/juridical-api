@@ -7,7 +7,7 @@ using AutoMapper;
 
 namespace juridical_api.Repository
 {
-    public class CourtHearingsRepository : SaveChangesDb, IRepository<CourtHearingsEntities, CourtHearingsDto>, IDisposable
+    public class CourtHearingsRepository : IRepository<CourtHearingsEntities, CourtHearingsDto>, IDisposable
     {
         private readonly AppDbContext appDbContext;
         private bool disposed = false;

@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace juridical_api.Repository
 {
-    public class LawyersRepository : SaveChangesDb, IRepository<LawyersEntities, LawyersDto>, IDisposable
+    public class LawyersRepository : IRepository<LawyersEntities, LawyersDto>, IDisposable
     {
         private readonly AppDbContext appDbContext;
         private bool disposed = false;
