@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 
@@ -27,12 +28,12 @@ namespace juridical_api.Models.Entities
 
         [Required]
         public Guid ClientId { get; set; }
-
+        [JsonIgnore]
         public ClientsEntities? Client { get; set; }
 
         [Required]
         public Guid CaseId { get; set; }
-
+        [JsonIgnore]
         public CasesEntities? Case { get; set; }
     }
 }

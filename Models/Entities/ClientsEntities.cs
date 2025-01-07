@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace juridical_api.Models.Entities
@@ -33,14 +34,13 @@ namespace juridical_api.Models.Entities
 
         //FK
 
-        public LawyersEntities? Lawyer { get; set; }
-
+        [JsonIgnore]
         public ReviewsEntities? Review { get; set; }
-
+        [JsonIgnore]
         public PaymentsEntities? Payment { get; set; }
-
+        [JsonIgnore]
         public CasesEntities? Case { get; set; }
-
+        [JsonIgnore]
         public ContractsEntities? Contract { get; set; }
     }
 }

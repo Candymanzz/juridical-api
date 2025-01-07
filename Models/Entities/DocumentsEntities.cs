@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace juridical_api.Models.Entities
@@ -29,7 +30,7 @@ namespace juridical_api.Models.Entities
 
         [Required]
         public Guid CaseId { get; set; }
-
+        [JsonIgnore]
         public CasesEntities? Case { get; set; }
     }
 }

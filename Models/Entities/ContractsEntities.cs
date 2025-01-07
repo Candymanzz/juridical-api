@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace juridical_api.Models.Entities
@@ -19,15 +20,14 @@ namespace juridical_api.Models.Entities
         [DataType(DataType.Date)]
         public DateTime ExpirationDate { get; set; }
 
-
         [Required]
         public Guid ClientId { get; set; }
-
+        [JsonIgnore]
         public ClientsEntities? Client { get; set; }
 
         [Required]
         public Guid LawyerId { get; set; }
-
+        [JsonIgnore]
         public LawyersEntities? Lawyer { get; set; }
     }
 }
