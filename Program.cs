@@ -6,6 +6,8 @@ using Microsoft.EntityFrameworkCore;
 using juridical_api.DTO;
 using System.Text.Json.Serialization;
 using juridical_api.Profile;
+using FluentValidation;
+using juridical_api.Validators;
 
 namespace juridical_api
 {
@@ -49,6 +51,16 @@ namespace juridical_api
             builder.Services.AddAutoMapper(typeof(ReviewsProfile));
             builder.Services.AddAutoMapper(typeof(TasksProfile));
             builder.Services.AddAutoMapper(typeof(Program));
+
+            builder.Services.AddValidatorsFromAssemblyContaining<Program>();
+            builder.Services.AddValidatorsFromAssemblyContaining<CasesValidator>();
+            builder.Services.AddValidatorsFromAssemblyContaining<ClientsValidator>();
+            builder.Services.AddValidatorsFromAssemblyContaining<ContractsValidator>();
+            builder.Services.AddValidatorsFromAssemblyContaining<DocumentsValidator>();
+            builder.Services.AddValidatorsFromAssemblyContaining<LawyersValidator>();
+            builder.Services.AddValidatorsFromAssemblyContaining<PaymentsValidator>();
+            builder.Services.AddValidatorsFromAssemblyContaining<ReviewsValidator>();
+            builder.Services.AddValidatorsFromAssemblyContaining<TasksValidator>();
 
             var app = builder.Build();
 
