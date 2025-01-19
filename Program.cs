@@ -8,6 +8,7 @@ using System.Text.Json.Serialization;
 using juridical_api.Profile;
 using FluentValidation;
 using juridical_api.Validators;
+using Microsoft.OpenApi.Models;
 
 namespace juridical_api
 {
@@ -19,6 +20,12 @@ namespace juridical_api
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
+            // builder.Services.AddControllers();
+            builder.Services.AddEndpointsApiExplorer();
+            builder.Services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "juridical-api", Version = "v1" });
+            });
 
             var connectionString = builder.Configuration.
                 GetConnectionString("DatabaseConnection");
@@ -28,7 +35,7 @@ namespace juridical_api
 
             builder.Services.AddControllers().AddJsonOptions(options =>
             {
-                options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles; // Добавить эту строку для обработки циклических ссылок
+                options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
             });
 
             builder.Services.AddScoped<IRepository<CasesEntities, CasesDto>, CasesRepository>();
@@ -68,6 +75,12 @@ namespace juridical_api
             if (!app.Environment.IsDevelopment())
             {
                 app.UseExceptionHandler("/Home/Error");
+            }
+
+            if (app.Environment.IsDevelopment())
+            {
+                app.UseSwagger();
+                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "juridical-apiV1"));
             }
 
             //app.UseStaticFiles();
