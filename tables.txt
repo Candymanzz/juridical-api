@@ -58,7 +58,6 @@ ID (Primary Key)
 Дата
 ID клиента (Foreign Key на Clients)
 ID адвоката (Foreign Key на Lawyers)
-
 8B9658B8-49C1-423A-A807-71D1706710E1 Client
 8B9658B8-49C1-423A-A807-71D1706710E2 Lawyer
 8B9658B8-49C1-423A-A807-71D1706710E3 Contracts
