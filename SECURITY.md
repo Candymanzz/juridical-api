@@ -1,5 +1,7 @@
-License Information
+MIT License
 
-This project is licensed under the terms that allow for viewing and studying the source code. 
-However, the code cannot be used in your own projects or for any commercial purposes. 
-All rights are reserved by the original authors, and any form of redistribution or usage in other projects is strictly prohibited.
+Copyright (c) 2025 SPS
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction...
